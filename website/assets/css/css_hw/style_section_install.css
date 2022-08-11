@@ -7,7 +7,7 @@
 .section_install_container_hw {
     background: #f5f5f5;
     padding: 50px;
-    width: 70%;
+    width: 90% !important;
 }
 .favicons_html_code_zone_hw {
     margin: 30px 0;

@@ -4,6 +4,23 @@
     display: none;
 }
 
+.savedFaviconsNavLink {
+    white-space: nowrap;
+}
+.userInitial {
+    text-transform: capitalize !important;
+    height: 42px;
+    width: 42px;
+    border-radius: 50%;
+    background-color: #251181;
+    color: #f7b05e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
 /* /////////////////////// RESPONSIVE 1 //////////////////////// */
 
 @media (max-width:960px) {

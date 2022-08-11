@@ -36,6 +36,7 @@
                             alt="logo"
                         />
                         <a href="/home"><h2>Zuricon<span class="span_nav">Gen</span></h2></a>
+                        
                     </div>
         
                     <div class="navlinks">
@@ -60,13 +61,25 @@
                                     Tutorial
                                 </a>
                             </li>
+                            {% if user.is_authenticated %}
+                            <li>
+                                <a class="nav-link savedFaviconsNavLink" href="/drafts" >
+                                    Saved favicons
+                                </a>
+                            </li>
+                            {% endif %}
                         </ul>
                     </div>
         
                     <div class="auth__menu">
                         <div class="registration">
+                            {% if user.is_authenticated %}
+                            <div id="authUserInitial" class="userInitial">{{user.username}}</div>
+                            <a href="/logout" class="sign_out">Sign out</a>
+                            {% else %}
                             <a href="/login" class="btn">Log in</a>
                             <a href="/sign-up" class="btn">Sign Up</a>
+                            {% endif %}
                         </div>
             
                         <!-- <div class="menu-icon"></div> -->
@@ -97,11 +110,18 @@
                             Tutorial
                         </a>
                     </li>
+                    {% if user.is_authenticated %}
                     <li>
                         <a class="mobile-nav-link" href="/drafts" >
                             Saved Favicons
                         </a>
                     </li>
+                    <li>
+                        <a class="mobile-nav-link" href="/logout" >
+                            Sign out
+                        </a>
+                    </li>
+                    {% else %}
                     <li>
                         <a class="mobile-nav-link" href="/login" >
                             Log In
@@ -112,6 +132,7 @@
                             Sign Up
                         </a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

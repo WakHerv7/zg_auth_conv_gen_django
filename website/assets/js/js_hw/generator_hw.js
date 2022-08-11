@@ -159,6 +159,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 responseType: 'blob'
             },
             success: function (response) {
+
+                var installSectionLink = document.createElement('a');
+                installSectionLink.href = "#section_install_hw"
+                document.body.appendChild(installSectionLink);
+                installSectionLink.click();
+                // installSectionLink.remove();
+
                 var link = document.createElement('a');
                 if (!saved) {
                     link.href = window.URL.createObjectURL(response)      

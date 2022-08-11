@@ -37,10 +37,14 @@
             <li>Download your favicons in a zip file or save to download later.</li>
         </ul>
         <div class="gen_examples_hw">
-            <span class="zuricongen_blue_color">Examples :</span>
+            <span class="zuricongen_blue_color">Example :</span>
             <div class="gen_examples_boxes_container_hw">
-                <div class="gen_examples_box_hw"></div>
-                <div class="gen_examples_box_hw"></div>
+                <div class="gen_examples_box_hw">
+                    <img src="{% static 'img/example/ZuriconGen_Favicon_Generation_Z.svg' %}" alt="">
+                </div>
+                <div class="gen_examples_box_hw">
+                    <!-- <img src="{% static 'img/example/ZuriconGen_Favicon_Generation_H.svg' %}" alt=""> -->
+                </div>
                 <div class="gen_examples_box_hw"></div>
             </div>
         </div>
@@ -141,6 +145,7 @@
                 <form id="sgenerator_download_save_buttons" method="post" action="{% url 'generator_page' %}" class="sgenerator_preview_container_bottom_hw">
                     {% csrf_token %}
                     <input type="hidden" id="sgenerator_svg_content" name="sgenerator_svg_content" value="2" />
+                    {% if user.is_authenticated %}
                     <a href="#" id="download_generation_btn" class="btn_hw btn_zuricongen_filled_hw">
                         Generate
                     </a>
@@ -148,13 +153,24 @@
                         <span>Save to drafts</span>
                         <img src="{% static 'img/chevron_right.svg' %}" width="12px" alt="">
                     </a>
+                    {% else %}
+                    <a href="/login" id="" class="btn_hw btn_zuricongen_filled_hw">
+                        Generate
+                    </a>
+                    <a href="/login" id="" class="btn_hw btn_zuricongen_outlined_hw btn_text_img_hw">
+                        <span>Save to drafts</span>
+                        <img src="{% static 'img/chevron_right.svg' %}" width="12px" alt="">
+                    </a>
+                    {% endif %}
                 </form>
             </div>
 
         </div>
     </section>
 
-    <section class="section_install_hw">
+    {% include 'components/installation.html' %}
+    
+    <!-- <section class="section_install_hw">
         <div class="section_install_container_hw">
             <h2 class="gen_page_section_title_hw zuricongen_blue_color mb_30_hw">Installation</h2>
             <p class="plain_text_hw mb_30_hw">
@@ -186,7 +202,7 @@
                 </button>
             </div>
         </div>
-    </section>
+    </section> -->
 
 {% endblock %}
 

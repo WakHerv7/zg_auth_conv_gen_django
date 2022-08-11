@@ -4,6 +4,7 @@
 {% block title %}Converter{% endblock %}
 {% block css_styles %}
 <link rel="stylesheet" href="{% static 'css/converter/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/converter/dragndrop.css' %}">
 <link rel="stylesheet" href="{% static 'css/css_hw/style_section_install.css' %}">
 <link rel="stylesheet" href="{% static 'css/css_hw/style_hw.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -21,33 +22,45 @@
                 </div>
             </div>
 
-            <div class="converter-box">
+            <form class="converter-box" id="convertFormId">
+                {% if user.is_authenticated %}
+                <input type="hidden" id="current_username" value="{{user.username}}">
+                {% endif %}
                 <div class="upload-top">
                     <p>Upload File</p>
                 </div>
 
                 <div class="droparea">
                     <div class="image">
-                    <img src="{% static 'img/converter/Icon24x24.png' %}" alt="">
+                        <img src="{% static 'img/converter/Icon24x24.png' %}" alt="">
                     </div>
                     <div class="drag">
-                    <p>Drag n drop here</p>
-                    <p>Or</p>
-                    <a href="#">Browse</a>
+                        <p>Drag and drop here</p>
+                        <p>Or</p>
+                        <a href="#">Click to browse</a>
                     </div>
-                    
+                    <div id="dropzone" class="dropzone"></div>
                 </div>
-                <input type="file" id="real-file" hidden="hidden">
-                <div class="upload-bottom" id="custom-button">
-                    <button type="submit">Upload Now</button>
+                <input type="file" class="droparea__input" id="real-file" hidden="hidden">
+                <div class="upload-bottom displayNone" id="custom-button">
+                    <a href="#" disabled id="upload_button_hw">Upload Now</a>
                 </div>
-            </div>
+            </form>
             
-            <div class="content-options">
-                <button class="pry-btn">Download</button>
-                <button class="pry-btn draft">Save to draft
-                <button class="pry-btn mobile-save">Save<span><i class="fa-solid fa-angle-right"></i></span>
-                </button>
+            <div class="content-options"> 
+                {% if user.is_authenticated %}
+                <a href="#" id="conv_download" class="pry-btn displayNone">Download</a>
+                <a href="#" id="conv_save1" class="pry-btn draft displayNone">Save to draft                
+                <a href="#" id="conv_save2" class="pry-btn mobile-save displayNone">Save<span><i class="fa-solid fa-angle-right"></i></span>
+                </a>
+                {% else %}
+                <a href="/login" id="conv_download" class="pry-btn displayNone">Download</a>
+                <a href="/login" id="conv_save1" class="pry-btn draft displayNone">Save to draft                
+                <a href="/login" id="conv_save2" class="pry-btn mobile-save displayNone">Save<span><i class="fa-solid fa-angle-right"></i></span>
+                </a>
+                {% endif %}
+                
+                <div id="loader_hw" class="loader_conv_hw displayNone"></div>                
             </div>
         </div>
     </section>
@@ -126,5 +139,6 @@
 
 {% block js_scripts %}
 <script src="{% static 'js/converter/script.js' %}" defer></script>
+<script src="{% static 'js/converter/dragndrop.js' %}" defer></script>
 <script type="text/javascript" src="{% static 'js/js_hw/converter_hw.js' %}"></script>
 {% endblock %}

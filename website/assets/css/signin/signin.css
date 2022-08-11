@@ -112,6 +112,7 @@ label {
 .check a {
   text-decoration: underline;
   color: var(--blue);
+  font-size: 16px !important;
 }
 a {
   text-decoration: none;
@@ -176,6 +177,7 @@ a {
   margin-left: 0.5rem;
   text-decoration: underline;
   color: #f7b05e;
+  font-weight: bold;
 }
 
 .invalid {

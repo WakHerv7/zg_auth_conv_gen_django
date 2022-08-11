@@ -224,10 +224,10 @@ def faviconConversion(request, document_root):
 
 
 def drafts(request, document_root):
-    downloadedGenfavicons = GeneratedFavicon.objects.filter(user = request.user, img_type="svg", saved_to_drafts = False)
-    downloadedConvfavicons = ConvertedFavicon.objects.filter(user = request.user, img_type="png", size=96, saved_to_drafts = False)
-    savedGenfavicons = GeneratedFavicon.objects.filter(user = request.user, img_type="svg", saved_to_drafts = True)
-    savedConvfavicons = ConvertedFavicon.objects.filter(user = request.user, img_type="png", size=96, saved_to_drafts = True)
+    downloadedGenfavicons = GeneratedFavicon.objects.filter(user = request.user, img_type="svg", saved_to_drafts = False).order_by("-id")
+    downloadedConvfavicons = ConvertedFavicon.objects.filter(user = request.user, img_type="png", size=96, saved_to_drafts = False).order_by("-id")
+    savedGenfavicons = GeneratedFavicon.objects.filter(user = request.user, img_type="svg", saved_to_drafts = True).order_by("-id")
+    savedConvfavicons = ConvertedFavicon.objects.filter(user = request.user, img_type="png", size=96, saved_to_drafts = True).order_by("-id")
     context={"savedGenfavicons": [], "savedConvfavicons": [], "downloadedGenfavicons": [], "downloadedConvfavicons": []}
     for fav in downloadedGenfavicons:
         zipId = fav.zip_file.id

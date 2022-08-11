@@ -114,6 +114,8 @@ input {
 .sign small,
 .sign a{
   font-size: 16px;
+  font-weight: bold;
+  text-align: right;
 }
 .sign a {
   color: #251181;

@@ -18,7 +18,7 @@ from reportlab.graphics import renderPDF, renderPM
 # ************************
 
 # START:for_download_tuto
-from .models import FilesAdmin, FaviconZipFile, GeneratedFavicon, UploadedFile, ConvertedFavicon
+from .models import FilesAdmin, FaviconZipFile, GeneratedFavicon, UploadedFile, ConvertedFavicon, Texticons, UserTexticon
 from django.urls import reverse
 from django.core.files.base import ContentFile, File
 # END:for_download_tuto
@@ -34,7 +34,52 @@ def tutorial(request):
     return render(request, 'pages/tutorial.html')
 
 def texticons(request):
-    return render(request, 'pages/texticons.html')
+    texticonsList = Texticons.objects.all()
+    if request.user :
+        userSavedTexticonsList= UserTexticon.objects.filter(user = request.user)
+        context={"texticonsList": []}
+        
+        for texticonItem in texticonsList:
+            savedItem = False
+            for userSavedTexticon in userSavedTexticonsList:
+                if texticonItem.id == userSavedTexticon.texticon.id :
+                    savedItem = True
+                    context["texticonsList"].append({"texticonItem": texticonItem, "savedToDrafts": 1})
+                    break
+            
+            if savedItem == False :
+                context["texticonsList"].append({"texticonItem": texticonItem, "savedToDrafts": 0})
+
+        return render(request, 'pages/texticons.html', context)
+    else:
+        context={"texticonsList": []}
+        for texticonItem in texticonsList:
+            context["texticonsList"].append({"texticonItem": texticonItem, "savedToDrafts": 0})            
+
+        return render(request, 'pages/texticons.html', context)
+
+@login_required(login_url="/login")
+def saveTexticonToDrafts(request):
+    if request.method == 'POST':
+        current_user = request.user
+        texticonId = request.POST['texticon_id'] 
+        texticon = Texticons.objects.get(id=texticonId)
+        user_texticon = UserTexticon(
+            user=current_user,
+            texticon= texticon,
+            saved_to_drafts = True
+        )
+        user_texticon.save()
+        return JsonResponse({'texticonId' : texticonId})
+
+
+
+
+
+
+
+
+
 
 
 
@@ -218,8 +263,30 @@ def faviconConversion(request, document_root):
 
 
 
+def createTexticons(request):
+    if request.method == 'POST':
+        letters = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
+        mainName = 'ZuriconGen_Texticon_'
+        
+        try:
+            for letter in letters:
+                relativePathToTexticonImage = os.path.join('texticons', 'images', mainName+letter+'.svg')
+                relativePathToTexticonZipFile = os.path.join('texticons', 'zipfiles', mainName+letter+'.zip')
+                texticonObj = Texticons(
+                    name=mainName+letter,                
+                    img_type="svg",
+                    html_code="<link rel='icon' href='"+mainName+letter+".svg'>"
+                )            
+                texticonObj.img_path.name=relativePathToTexticonImage
+                texticonObj.zip_path.name=relativePathToTexticonZipFile
+                texticonObj.save()
+            
+            return HttpResponse('Texticons created successfully !')
 
-
+        except KeyError:
+            return redirect('error_w')
+    
+    return render(request, 'main/createTexticons.html')
 
 
 
@@ -228,7 +295,8 @@ def drafts(request, document_root):
     downloadedConvfavicons = ConvertedFavicon.objects.filter(user = request.user, img_type="png", size=96, saved_to_drafts = False).order_by("-id")
     savedGenfavicons = GeneratedFavicon.objects.filter(user = request.user, img_type="svg", saved_to_drafts = True).order_by("-id")
     savedConvfavicons = ConvertedFavicon.objects.filter(user = request.user, img_type="png", size=96, saved_to_drafts = True).order_by("-id")
-    context={"savedGenfavicons": [], "savedConvfavicons": [], "downloadedGenfavicons": [], "downloadedConvfavicons": []}
+    userSavedTexticonsList= UserTexticon.objects.filter(user = request.user)
+    context={"savedGenfavicons": [], "savedConvfavicons": [], "savedTexticons": [], "downloadedGenfavicons": [], "downloadedConvfavicons": []}
     for fav in downloadedGenfavicons:
         zipId = fav.zip_file.id
         ziplink = FaviconZipFile.objects.get(id=zipId)
@@ -248,6 +316,10 @@ def drafts(request, document_root):
         zipId = fav.zip_file.id
         ziplink = FaviconZipFile.objects.get(id=zipId)
         context["savedConvfavicons"].append({"favicon": fav, "ziplink":ziplink})
+
+    for userSavedTexticon in userSavedTexticonsList:
+        texticon = Texticons.objects.get(id = userSavedTexticon.texticon.id)
+        context["savedTexticons"].append({"texticon": texticon})
 
     return render(request, 'pages/drafts.html', context)
 
@@ -276,8 +348,14 @@ def deleteFavicon(request, value):
     except KeyError:
             return redirect('error_w')
 
-    
-
+def deleteSavedTexticon(request, value):
+    texticonId = value
+    try:        
+        userSavedTexticonToDelete= UserTexticon.objects.get(texticon_id = texticonId)
+        userSavedTexticonToDelete.delete()
+        return redirect('drafts')
+    except KeyError:
+        return redirect('error_w')
 
 
 

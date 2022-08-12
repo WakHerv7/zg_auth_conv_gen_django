@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     let authUserInitial = document.getElementById("authUserInitial");
-    if (authUserInitial.innerText != "")
+    if (authUserInitial)
     {
         authUserInitial.innerText = authUserInitial.innerText.charAt(0)
     }

@@ -67,6 +67,29 @@
         </a>
       </div>
       {%endfor%}
+
+
+      <p class="date">Texticons</p>
+      {% for item in savedTexticons %}    
+          
+      <div class="favicon-control " id="{{ item.texticon.name }}.{{ item.texticon.img_type }}">
+        <span class="image">
+          <img src="{{item.texticon.img_path.url}}" alt="">
+        </span>
+        <span class="title">
+          <h2>{{ item.texticon.name }}.{{ item.texticon.img_type }}</h2>
+          <a href="{{item.texticon.zip_path.url}}" download="{{item.texticon.zip_path.url}} " class="link">
+            Download
+          </a>
+        </span>
+      
+        <a href="/delete_saved_texticon/{{item.texticon.id}}">
+          <div class="x" >
+            <i class="fa-solid fa-xmark"></i>
+          </div>
+        </a>
+      </div>
+      {%endfor%}
     </div>
 
 

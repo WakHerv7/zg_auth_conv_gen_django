@@ -8,7 +8,9 @@ urlpatterns = [
     path('reviews', views.reviews, name="reviews"),
     path('tutorial', views.tutorial, name="tutorial"),
     path('texticons', views.texticons, name="texticons"),
-
+    path('create_texticons', views.createTexticons, name="create_texticons"),
+    path('save_texticon', views.saveTexticonToDrafts, name="save_texticon"),
+    re_path(r'^delete_saved_texticon/(?P<value>\d+)/$', views.deleteSavedTexticon, name="delete_saved_texticon"), 
 
     path('generator_page', views.generatorPage, name="generator_page"),    
     path('favicon_generation', views.faviconGeneration, { 'document_root': settings.MEDIA_ROOT }, name="favicon_generation"),

@@ -48,3 +48,14 @@ class ConvertedFavicon(models.Model):
     saved_to_drafts = models.BooleanField(default=False)
     html_code = models.CharField(max_length=255)
     
+class Texticons(models.Model):
+    name = models.CharField(max_length=255)
+    img_path = models.FileField (upload_to="texticons/images/" ,null=True, blank=True)
+    zip_path = models.FileField (upload_to="texticons/zipfiles/" ,null=True, blank=True)
+    img_type = models.CharField(max_length=255)
+    html_code = models.CharField(max_length=255, default="")
+
+class UserTexticon(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE ,null=True, blank=True, default = None)
+    texticon = models.ForeignKey(Texticons, on_delete=models.CASCADE ,null=True, blank=True, default = None)
+    saved_to_drafts = models.BooleanField(default=False)
